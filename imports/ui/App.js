@@ -1,34 +1,34 @@
 import React, { Component } from 'react';
- 
-import Task from './Task.js';
- 
-// App component - represents the whole app
-export default class App extends Component {
-  getTasks() {
-    return [
-      { _id: 1, text: 'This is task 1' },
-      { _id: 2, text: 'This is task 2' },
-      { _id: 3, text: 'This is task 3' },
-    ];
-  }
- 
-  renderTasks() {
-    return this.getTasks().map((task) => (
-      <Task key={task._id} task={task} />
-    ));
-  }
- 
+
+import DesView from './DesView';
+import SaesView from './SaesView';
+import './App.css';
+
+class App extends Component {
   render() {
     return (
-      <div className="container">
-        <header>
-          <h1>Todo List</h1>
+      <div className="App">
+        <header className="App-header">
+          <img src="/logo.svg" className="App-logo" alt="logo" />
+          <h1 className="App-title">Criptografía - DES Y SAES</h1>
         </header>
- 
-        <ul>
-          {this.renderTasks()}
-        </ul>
+        <div className="App-intro">
+          <br/>
+          <br/>
+          <div className="ui container">
+            <div className="ui grid">
+              <div className="eight wide column">
+                <DesView />
+              </div>
+              <div className="eight wide column">
+                <SaesView />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 }
+
+export default App;
