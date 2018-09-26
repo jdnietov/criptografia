@@ -18,6 +18,7 @@ class App extends Component {
           <div className="ui container">
             <div className="ui grid">
               <div className="eight wide column">
+                <h2 className="ui header">Encripción DES</h2>
                 <DesView />
               </div>
               <div className="eight wide column">
