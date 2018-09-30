@@ -1,4 +1,5 @@
 import React from 'react';
+import { encryptBySaes } from '../crypto/saes';
 
 class SaesView extends React.Component {
     constructor() {
@@ -6,7 +7,11 @@ class SaesView extends React.Component {
 
         this.state = {
             input: '',
-            result: ''
+            result: '',
+            exists: {
+                input: false,
+                result: false
+            }
         }
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -15,7 +20,8 @@ class SaesView extends React.Component {
     }
 
     handleInputChange(e) {
-        this.setState({ input: e.target.value });
+        const { value } = e.target;
+        this.setState(prevState => ({ input: value, exists: {...prevState.exists, input: value.length > 0 } }));
     }
 
     decrypt() {
@@ -24,8 +30,9 @@ class SaesView extends React.Component {
     }   
     
     encrypt() {
-        console.log("lolo")
-        this.setState(prevState => ({ result: prevState.input }))
+        if(this.state.exists.input) {
+            this.setState(prevState => ({ result: encryptBySaes(prevState.input) }))
+        }
     }
 
     render() {

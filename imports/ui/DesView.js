@@ -1,5 +1,5 @@
 import React from 'react';
-import BigNumber from 'bignumber.js';
+import { generateDesKey } from '../crypto/des';
 
 class DesView extends React.Component {
     constructor() {
@@ -22,10 +22,6 @@ class DesView extends React.Component {
         this.decrypt = this.decrypt.bind(this);
     }
 
-    componentDidMount() {
-        BigNumber.config({ CRYPTO: true, DECIMAL_PLACES: 16 });
-    }
-
     handleInputChange(e) {
         this.setState({ input: e.target.value });
     }
@@ -41,7 +37,7 @@ class DesView extends React.Component {
     }
 
     
-    generateKey = () => this.setState({ key: BigNumber.random().times(10e16).toString(16) })
+    generateKey = () => this.setState({ key: generateDesKey() })
 
     render() {
         return (
