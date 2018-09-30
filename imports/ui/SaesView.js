@@ -7,6 +7,7 @@ class SaesView extends React.Component {
 
         this.state = {
             input: '',
+            key: '',
             result: '',
             exists: {
                 input: false,
@@ -17,6 +18,13 @@ class SaesView extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.encrypt = this.encrypt.bind(this);
         this.decrypt = this.decrypt.bind(this);
+    }
+
+    componentDidMount() {
+        Meteor.call('fetchKey', 1, (error, result) => {
+            if(error)   console.error(error);
+            console.log("result", result.rows);
+        });
     }
 
     handleInputChange(e) {
