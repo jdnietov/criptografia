@@ -7,10 +7,11 @@ class SaesView extends React.Component {
 
         this.state = {
             input: '',
-            key: '',
+            keyword: '',
             result: '',
             exists: {
                 input: false,
+                keyword: false,
                 result: false
             }
         }
@@ -20,16 +21,9 @@ class SaesView extends React.Component {
         this.decrypt = this.decrypt.bind(this);
     }
 
-    componentDidMount() {
-        Meteor.call('fetchKey', 1, (error, result) => {
-            if(error)   console.error(error);
-            console.log("result", result.rows);
-        });
-    }
-
     handleInputChange(e) {
-        const { value } = e.target;
-        this.setState(prevState => ({ input: value, exists: {...prevState.exists, input: value.length > 0 } }));
+        const { name, value } = e.target;
+        this.setState(prevState => ({ [name]: value, exists: {...prevState.exists, [name]: value.length > 0 } }));
     }
 
     decrypt() {
@@ -37,8 +31,11 @@ class SaesView extends React.Component {
     }   
     
     encrypt() {
-        if(this.state.exists.input) {
-            this.setState(prevState => ({ result: Saes.encrypt(prevState.input) }))
+        if(this.state.exists.input && this.state.exists.keyword) {
+            Meteor.call('fetchKey', this.state.keyword, (error, result) => {
+                if(error)   console.error(error);
+                this.setState(prevState => ({ result: Saes.encrypt(prevState.input, result.rows[0]) }))
+            });
         }
     }
 
@@ -50,6 +47,10 @@ class SaesView extends React.Component {
                 <div className="ui form">
                     <div className="field">
                         <input onChange={this.handleInputChange} name="input" type="text" placeholder="Inserta aquí tu texto..."/>
+                    </div>
+
+                    <div className="field">
+                        <input onChange={this.handleInputChange} name="keyword" type="text" placeholder="Inserta aquí tu palabra clave..."/>
                     </div>
 
                     <div className="ui fluid buttons">

@@ -141,8 +141,8 @@ function encryptBlock(block, key) {
 /**
  * @param {String} message The message to encrypt
  */
-function encrypt(message) {
-    key = [[253, 84], [3, 1]];
+function encrypt(message, keyarr) {
+    key = [[keyarr.value1, keyarr.value2], [keyarr.value3, keyarr.value4]];
     var result = "";
 
     message = strToHex(message);

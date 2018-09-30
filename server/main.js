@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { Client } from 'pg';
 
+const HASH = 1;
+
 Meteor.startup(() => {
   const client = new Client({
     user: 'jdnietov',
@@ -14,8 +16,13 @@ Meteor.startup(() => {
   });
 
   Meteor.methods({
-    'fetchKey'(keyId) {
-      return client.query("SELECT value1, value2, value3, value4 FROM keys WHERE id=" + keyId + ";");
-    }
+    'fetchKey'(keyword) {
+      let h = 0;
+      for(let i = 0; i < keyword.length; i++) {
+        h += keyword.charCodeAt(i);
+      }
+      const id = (h % HASH) + 1;
+      return client.query("SELECT value1, value2, value3, value4 FROM keys WHERE id=" + id + ";");
+    },    
   });
 });
