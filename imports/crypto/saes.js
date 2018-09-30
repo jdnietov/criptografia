@@ -1,3 +1,5 @@
+const Saes = {};
+
 const BLOCK_SIZE = 8;
 const SUBBYTES = {
     "00": "00", "01": "01", "02": "8d", "03": "f6", "04": "cb", 
@@ -65,20 +67,20 @@ const SUBBYTES = {
     "fb": "a0", "fc": "cd", "fd": "1a", "fe": "41", "ff": "1c",
 };
 
-function toHex(str) {   
+function strToHex(str) {
     var result = "";
     for(let i = 0; i < str.length; i++) {
-        result += str.charCodeAt(i).toString(16);
+        let hex = str.charCodeAt(i).toString(16);
+        if(hex.length == 1) hex = "0" + hex;
+        result += hex;        
     }
     return result;
 }
 
 function fromHex(str) {
     var result = "";
-    for(let i = 0; i < str.length; i+=2) {
+    for(let i = 0; i < str.length; i+=2)
         result += String.fromCharCode(parseInt("0x" + str.substr(i,2)));
-    }
-
     return result;
 }
 
@@ -90,13 +92,14 @@ function multiply2x2(block, key) {
         (matrix[0][0]*key[0][0] + matrix[0][1]*key[1][0]) % 256,
         (matrix[0][0]*key[0][1] + matrix[0][1]*key[1][1]) % 256,
         (matrix[1][0]*key[0][0] + matrix[1][1]*key[1][0]) % 256,
-        (matrix[1][0]*key[1][0] + key[1][1]*key[1][1]) % 256
+        (matrix[1][0]*key[0][1] + matrix[1][1]*key[1][1]) % 256
     ];
 
-    console.log("matrix", mult);
     let result = "";
     mult.forEach((element) => {
-        result += element.toString(16);
+        res = element.toString(16);
+        if(res.length == 1) res = "0" + res;
+        result += res;
     })
 
     return result;
@@ -107,16 +110,21 @@ function multiply2x2(block, key) {
  */
 function applySubBytes(block) {
     var result = "";
-    for(let i = 0; i < 8; i+=2) {
+    for(let i = 0; i < BLOCK_SIZE; i+=2) {
         result += SUBBYTES[block.substr(i, 2)];
     }
     return result;
 }
 
-function encryptSaesBlock(block) {
-    key = [[256, 51], [5, 1]];
+function revertSubBytes(block) {
+    var result = "";
+    for(let i = 0; i < BLOCK_SIZE; i+=2)
+        result += Object.keys(SUBBYTES).find(key => SUBBYTES[key] === block.substr(i, 2));
+    return result;
+}
 
-    if(block.length !== 8) {
+function encryptBlock(block, key) {
+    if(block.length !== BLOCK_SIZE) {
         console.error("block must have length 8");
         return;
     }
@@ -133,20 +141,46 @@ function encryptSaesBlock(block) {
 /**
  * @param {String} message The message to encrypt
  */
-export const encryptBySaes = function(message) {
-    // convert string to hexadecimal
-    message = toHex(message);
-
+function encrypt(message) {
+    key = [[253, 84], [3, 1]];
     var result = "";
+
+    message = strToHex(message);
+
     for(let i = 0; i < message.length; i+=BLOCK_SIZE) {
         let sub = message.substr(i, BLOCK_SIZE)
         if(i+BLOCK_SIZE>=message.length) {
             while(sub.length < BLOCK_SIZE)   sub += "0";
         }
-        console.log(sub);
-        result += encryptSaesBlock(sub);
+        result += encryptBlock(sub, key);
     }
 
     // result = fromHex(result);
     return result;
 }
+
+function decryptBlock(block, key) {
+    let stageOne = multiply2x2(block, key);
+    let stageTwo = [stageOne.substr(6, 2), stageOne.substr(4, 2), stageOne.substr(2, 2), stageOne.substr(0, 2)].join("");
+    let result = stageTwo;
+    for(let i = 0; i < 3; i++)
+        result = revertSubBytes(result);
+    return result;
+}
+
+function decrypt(cyphertext) {
+    inverse = [[1, 172], [253, 253]];
+    result = "";
+
+    for(let i = 0; i < cyphertext.length; i+= BLOCK_SIZE) {
+        let sub = cyphertext.substr(i, BLOCK_SIZE);
+        result += decryptBlock(sub, inverse);
+   }
+
+   return fromHex(result);
+}
+
+Saes.encrypt = encrypt;
+Saes.decrypt = decrypt;
+
+export default Saes;
