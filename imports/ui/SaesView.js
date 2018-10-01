@@ -33,8 +33,8 @@ class SaesView extends React.Component {
                 this.setState(prevState => ({ result: Saes.decrypt(prevState.input, result.rows[0]) }))
             });
         }
-    }   
-    
+    }
+
     encrypt() {
         if(this.state.exists.input && this.state.exists.keyword) {
             Meteor.call('fetchKey', this.state.keyword, (error, result) => {

@@ -1,9 +1,10 @@
-import BigNumber from 'bignumber.js';
+const DES = {};
 
-export const generateDesKey = function() {
-    return BigNumber.random(16).times(10e16).toString(16);
+function imprimir(message,key){
+  return message + key;
 }
 
-export const encryptByDes = function(message) {
-    
-}
+DES.imprimir = imprimir;
+
+
+export default DES;

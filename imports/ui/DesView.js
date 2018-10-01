@@ -1,5 +1,6 @@
 import React from 'react';
-import { generateDesKey } from '../crypto/des';
+import BigNumber from 'bignumber.js';
+import apiDES from '../crypto-des/apiDES.js';
 
 class DesView extends React.Component {
     constructor() {
@@ -17,27 +18,40 @@ class DesView extends React.Component {
         }
 
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleInputCh = this.handleInputCh.bind(this);
         this.generateKey = this.generateKey.bind(this);
         this.encrypt = this.encrypt.bind(this);
         this.decrypt = this.decrypt.bind(this);
+    }
+
+    componentDidMount() {
+        BigNumber.config({ CRYPTO: true, DECIMAL_PLACES: 16 });
     }
 
     handleInputChange(e) {
         this.setState({ input: e.target.value });
     }
 
-    decrypt() {
-        console.log("lala")
-        this.setState(prevState => ({ result: prevState.input }))
-    }   
-    
-    encrypt() {
-        console.log("lolo")
-        this.setState(prevState => ({ result: prevState.input }))
+    handleInputCh(e) {
+        this.setState({ key: e.target.value });
     }
 
-    
-    generateKey = () => this.setState({ key: generateDesKey() })
+    decrypt() {
+        //let myKey = "hola1234"
+        console.log(this.state.key);
+        console.log(this.state.input);
+        this.setState(prevState => ({ result: apiDES.getParams(this.state.input, this.state.key, false) }))
+    }
+
+    encrypt() {
+        console.log(this.state.key);
+        console.log(this.state.input);
+        //let myKey = "hola1234"
+        this.setState(prevState => ({ result: apiDES.getParams(this.state.input, this.state.key, true) }))
+    }
+
+
+    generateKey = () => this.setState({ key: BigNumber.random().times(10e16).toString(16) });
 
     render() {
         return (
@@ -48,7 +62,7 @@ class DesView extends React.Component {
                 </div>
 
                 <div className="field">
-                    <input value={this.state.key} onChange={this.handleInputChange} name="key" type="text" placeholder="Inserta aquí tu llave..."/>
+                    <input onChange={this.handleInputCh} name="key" type="text" placeholder="Inserta aquí tu llave..."/>
                 </div>
 
                 <div className="ui fluid buttons">
