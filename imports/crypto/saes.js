@@ -143,6 +143,7 @@ function encryptBlock(block, key) {
  */
 function encrypt(message, keyarr) {
     key = [[keyarr.value1, keyarr.value2], [keyarr.value3, keyarr.value4]];
+    console.log(key);
     var result = "";
 
     message = strToHex(message);
@@ -168,8 +169,10 @@ function decryptBlock(block, key) {
     return result;
 }
 
-function decrypt(cyphertext) {
-    inverse = [[1, 172], [253, 253]];
+function decrypt(cyphertext, keyarr) {
+    const { value1, value2, value3, value4 } = keyarr;
+    inverse = [[value4 % 256, (256-value2) % 256], [(256-value3) % 256, value1 % 256]];
+    console.log(inverse);
     result = "";
 
     for(let i = 0; i < cyphertext.length; i+= BLOCK_SIZE) {

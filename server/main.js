@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Client } from 'pg';
 
-const HASH = 1;
+var HASH = 854;
 
 Meteor.startup(() => {
   const client = new Client({
@@ -11,8 +11,14 @@ Meteor.startup(() => {
     password: 'password',
     port: 5432,
   });
+
   client.connect().catch((error) => {
     console.log(error);
+  });
+
+  client.query("SELECT COUNT(*) FROM keys;").then((res, err) => {
+    if(err) console.error(err);
+    HASH = res.rows[0].count;
   });
 
   Meteor.methods({

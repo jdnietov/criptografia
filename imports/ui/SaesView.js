@@ -27,7 +27,12 @@ class SaesView extends React.Component {
     }
 
     decrypt() {
-        this.setState(prevState => ({ result: Saes.decrypt(prevState.input) }))
+        if(this.state.exists.input && this.state.exists.keyword) {
+            Meteor.call('fetchKey', this.state.keyword, (error, result) => {
+                if(error)   console.error(error);
+                this.setState(prevState => ({ result: Saes.decrypt(prevState.input, result.rows[0]) }))
+            });
+        }
     }   
     
     encrypt() {
@@ -54,13 +59,20 @@ class SaesView extends React.Component {
                     </div>
 
                     <div className="ui fluid buttons">
-                        <button onClick={this.encrypt} className="ui button">Encriptar</button>
+                        <button onClick={this.encrypt} className="ui blue button">Encriptar</button>
                         <div className="or" data-text="o"></div>
                         <button onClick={this.decrypt} className="ui positive button">Desencriptar</button>
                     </div>
 
-                    <h3 className="ui header">Tu resultado es:</h3>
-                    <h4 className="ui header">{this.state.result}</h4>
+                    {(() => {
+                        if(this.state.result.length !== 0)
+                            return (
+                                <div className="ui segment">
+                                    <h3 className="ui header">Tu resultado es:</h3>
+                                    <p>{this.state.result}</p>
+                                </div>
+                            );
+                    })()}
                 </div>
             </div>
         );

@@ -42,6 +42,7 @@ class DesView extends React.Component {
     render() {
         return (
             <div className="ui form">
+                <h2 className="ui header">Encripción DES</h2>
                 <div className="field">
                     <input onChange={this.handleInputChange} name="input" type="text" placeholder="Inserta aquí tu texto..."/>
                 </div>
@@ -59,8 +60,15 @@ class DesView extends React.Component {
                 <br/>
                 <div onClick={this.generateKey} className="ui fluid button">Generar una llave aleatoria</div>
 
-                <h3 className="ui header">Tu resultado es:</h3>
-                <h4 className="ui header">{this.state.result}</h4>
+                {(() => {
+                    if(this.state.result.length !== 0)
+                        return (
+                            <div className="ui segment">
+                                <h3 className="ui header">Tu resultado es:</h3>
+                                <p>{this.state.result}</p>
+                            </div>
+                        );
+                })()}
             </div>
         );
     }

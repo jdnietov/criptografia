@@ -10,7 +10,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src="/logo.svg" className="App-logo" alt="logo" />
-          <h1 className="App-title">Criptografía - DES Y SAES</h1>
+          <h1 className="App-title">Cryptapp - encripción de mensajes por DES y SAES</h1>
         </header>
         <div className="App-intro">
           <br/>
@@ -18,7 +18,6 @@ class App extends Component {
           <div className="ui container">
             <div className="ui grid">
               <div className="eight wide column">
-                <h2 className="ui header">Encripción DES</h2>
                 <DesView />
               </div>
               <div className="eight wide column">
