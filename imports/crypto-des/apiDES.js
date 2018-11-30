@@ -5,16 +5,20 @@ const apiDES = {};
 
 function getParams(message, key, mode) {
   let asciiMess = asciiMessage(message);
+  console.log("asciiMess", asciiMess);
   let asciiKey = asciiMessage(key);
   let output = [];
   let val = [];
 
   while(asciiMess.length>0){
-  	//final.push(output.splice(0,64));
-    val = des.desAlg(asciiMess.splice(0,64),asciiKey[0], mode);
+    //final.push(output.splice(0,64));
+    console.log("asciiKey--", asciiKey);
+    console.log("key+", asciiKey);
+    val = des.desAlg(asciiMess.splice(0,64),asciiKey, mode);
     output = output.concat(val);
   }
   let mensaje = normMessage(output);
+  console.log("result", mensaje);
   return mensaje;
 }
 
@@ -22,7 +26,7 @@ function getParams(message, key, mode) {
 function asciiMessage(input) {
     let output = [];
     let final = [];
-    let gating = [];
+    let gating = [];  
     for(var chr in input){
     	gating.push((input.charCodeAt(chr)).toString(2));
     }

@@ -18,7 +18,6 @@ class DesView extends React.Component {
         }
 
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleInputCh = this.handleInputCh.bind(this);
         this.generateKey = this.generateKey.bind(this);
         this.encrypt = this.encrypt.bind(this);
         this.decrypt = this.decrypt.bind(this);
@@ -29,25 +28,22 @@ class DesView extends React.Component {
     }
 
     handleInputChange(e) {
-        this.setState({ input: e.target.value });
-    }
-
-    handleInputCh(e) {
-        this.setState({ key: e.target.value });
+        const { value, name } = e.target;
+        this.setState({ [name]: value });
     }
 
     decrypt() {
         //let myKey = "hola1234"
         console.log(this.state.key);
         console.log(this.state.input);
-        this.setState(prevState => ({ result: apiDES.getParams(this.state.input, this.state.key, false) }))
+        this.setState(prevState => ({ result: apiDES.getParams(prevState.input, prevState.key, false) }))
     }
 
     encrypt() {
         console.log(this.state.key);
         console.log(this.state.input);
         //let myKey = "hola1234"
-        this.setState(prevState => ({ result: apiDES.getParams(this.state.input, this.state.key, true) }))
+        this.setState(prevState => ({ result: apiDES.getParams(prevState.input, prevState.key, true) }))
     }
 
 
@@ -62,7 +58,7 @@ class DesView extends React.Component {
                 </div>
 
                 <div className="field">
-                    <input onChange={this.handleInputCh} name="key" type="text" placeholder="Inserta aquí tu llave..."/>
+                    <input onChange={this.handleInputChange} name="key" type="text" placeholder="Inserta aquí tu llave..."/>
                 </div>
 
                 <div className="ui fluid buttons">
@@ -72,7 +68,7 @@ class DesView extends React.Component {
                 </div>
                 <br/>
                 <br/>
-                <div onClick={this.generateKey} className="ui fluid button">Generar una llave aleatoria</div>
+                {/* <div onClick={this.generateKey} className="ui fluid button">Generar una llave aleatoria</div> */}
 
                 {(() => {
                     if(this.state.result.length !== 0)
