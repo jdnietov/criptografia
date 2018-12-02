@@ -1,11 +1,13 @@
 import React from 'react';
 import Saes from '../crypto/saes';
+import { RSA } from '../crypto/rsa';
 
 class SaesView extends React.Component {
     constructor() {
         super();
 
         this.state = {
+            cryptosystem: {},
             input: '',
             keyword: '',
             result: '',
@@ -19,6 +21,10 @@ class SaesView extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.encrypt = this.encrypt.bind(this);
         this.decrypt = this.decrypt.bind(this);
+    }
+
+    componentDidMount() {
+        this.setState({ cryptosystem: RSA.cryptosystem() })
     }
 
     handleInputChange(e) {
@@ -37,10 +43,18 @@ class SaesView extends React.Component {
 
     encrypt() {
         if(this.state.exists.input && this.state.exists.keyword) {
-            Meteor.call('fetchKey', this.state.keyword, (error, result) => {
+            const { input, keyword, cryptosystem } = this.state;
+            const { e, d, n } = cryptosystem;
+            const messageHash = RSA.encrypt(input, d, n);
+            const keywordHash = RSA.encrypt(keyword, d, n);
+            const key = {e, n};
+            console.log(input, keyword, key, messageHash, keywordHash);
+            Meteor.call('encryptSaesFromServer', input, keyword, key, messageHash, keywordHash, (error, result) => {
                 if(error)   console.error(error);
-                this.setState(prevState => ({ result: Saes.encrypt(prevState.input, result.rows[0]) }))
-            });
+                if(result.message)  console.error(result.message);
+                console.log(result);
+                this.setState({ result });
+            })
         }
     }
 
