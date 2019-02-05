@@ -9,7 +9,7 @@ Meteor.startup(() => {
   console.log("[*] Meteor server started.");
   const client = new Client({
     user: 'jdnietov',
-    host: '127.0.0.1',
+    host: '192.168.99.101',
     database: 'criptapp',
     password: 'password',
     port: 5432,
