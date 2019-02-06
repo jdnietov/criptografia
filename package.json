@@ -26,9 +26,10 @@
   },
   "devDependencies": {
     "autoprefixer": "^6.3.1",
+    "meteor-azure": "^2.1.0-rc.7",
     "postcss": "^6.0.22",
-    "postcss-load-config": "^1.2.0",
-    "postcss-easy-import": "^1.0.1"
+    "postcss-easy-import": "^1.0.1",
+    "postcss-load-config": "^1.2.0"
   },
   "postcss": {
     "plugins": {

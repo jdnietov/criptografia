@@ -8,11 +8,12 @@ var HASH = 854;
 Meteor.startup(() => {
   console.log("[*] Meteor server started.");
   const client = new Client({
-    user: 'jdnietov',
-    host: '127.0.0.1',
-    database: 'criptapp',
-    password: 'password',
+    user: 'mltpbmxnkwvyvj',
+    host: 'ec2-54-225-237-84.compute-1.amazonaws.com',
+    database: 'dbsl9a90anp9td',
+    password: 'fecf0767142194a59c80bab7fd9b390ecc7ad9a489944e9424ab15351e177b9f',
     port: 5432,
+    ssl: true,
   });
 
   client.connect().catch((error) => {
