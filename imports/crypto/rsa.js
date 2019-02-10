@@ -43,14 +43,15 @@ function powerMod(base, exponent, modulus) {
 rsa.cryptosystem = function() {
     let p = getPrime.getBigPrime();
     let q = getPrime.getBigPrime();
-    console.log("P: " + p);
-    console.log("Q: " + q);
+    
     
     
     //let p = randomPrime();
     //let q = randomPrime();
 
     while(q == p)   q = getPrime.getBigPrime();
+    console.log("P: " + p);
+    console.log("Q: " + q);
     
     
     const n = p * q;

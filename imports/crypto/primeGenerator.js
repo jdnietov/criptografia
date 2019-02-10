@@ -10,7 +10,7 @@ THIRTY.fromInt(30);
 
 module.exports.getBigPrime = () => {
   // generate random BigInteger
-  let num = generateRandom(32);
+  let num = generateRandom(8);
   
   // find prime nearest to random number
   let prime_ = findPrime(num);
@@ -59,7 +59,7 @@ function findPrime(num) {
     // get next potential prime
     num.dAddOffset(GCD_30_DELTA[deltaIdx++ % 8], 0);
   }
-  return num;
+  return parseInt(num);
   // keep trying (setImmediate would be better here)
   //setTimeout(function() {
     //findPrime(num);
