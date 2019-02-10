@@ -70,8 +70,8 @@ Meteor.startup(() => {
         .then(key => SAES.encrypt(message, key));
       } else {
         console.log("[!] ERROR: Message hash does not match.");
-        console.log("[!]", RSA.decrypt(messageHash, e, n));
-        console.log("[!]", message);
+        console.log("[!] Decrypted: ", RSA.decrypt(messageHash, e, n));
+        console.log("[!] Received:  ", message);
         return { message: "Message mismatch" };
       }
     }
