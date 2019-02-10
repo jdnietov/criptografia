@@ -1,10 +1,14 @@
+const getPrime = require('./primeGenerator');
 import BigNumber from 'bignumber.js';
+
+//let primeEx = getPrime.getBigPrime();
 
 rsa = {};
 
 const primes = [2, 3, 5, 7, 11, 13, 17, 53, 61];
 
 function randomPrime() { return primes[Math.floor(Math.random() * 9)]; }
+
 
 const eea = (a, b) => {
     if(b > a) {
@@ -37,10 +41,20 @@ function powerMod(base, exponent, modulus) {
 }
 
 rsa.cryptosystem = function() {
-    var p = randomPrime();
-    var q = randomPrime();
-    while(q == p)   q = randomPrime();
+    let p = getPrime.getBigPrime();
+    let q = getPrime.getBigPrime();
+    console.log("P: " + p);
+    console.log("Q: " + q);
+    
+    
+    //let p = randomPrime();
+    //let q = randomPrime();
+
+    while(q == p)   q = getPrime.getBigPrime();
+    
+    
     const n = p * q;
+    console.log("=====================================>>>>>>>>>>>>>: " + n );
     const totient = (p-1) * (q-1);
     
     let es = [], ds = [];
