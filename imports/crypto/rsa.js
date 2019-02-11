@@ -84,7 +84,7 @@ rsa.encrypt = function(message, e, n) {
     let i;
     for(i = 0; i < message.length; i++) {
         const m = message.charCodeAt(i);
-        console.log(m);
+        //console.log(m);
         c.push(BigNumber(m).pow(e).mod(n).toString());
     }
     return c;
@@ -94,7 +94,7 @@ rsa.decrypt = function(encryption, d, n) {
     // console.log("[*] enterying rsa.decrypt function.");
     let i;
     let m = '';
-    console.log(encryption);
+    //console.log(encryption);
     for(i = 0; i < encryption.length; i++) {
         const c = encryption[i];
         // console.log(BigNumber(c).pow(d).mod(n).toString());

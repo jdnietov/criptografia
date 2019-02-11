@@ -2,16 +2,18 @@ import { Meteor } from 'meteor/meteor';
 import { Client } from 'pg';
 import SAES from '../imports/crypto/saes';
 import { RSA } from '../imports/crypto/rsa';
+const credentials = require('./credentials');
 
 var HASH = 854;
 
 Meteor.startup(() => {
   console.log("[*] Meteor server started.");
+  let auth = credentials.dataInfo();
   const client = new Client({
-    user: 'mltpbmxnkwvyvj',
-    host: 'ec2-54-225-237-84.compute-1.amazonaws.com',
-    database: 'dbsl9a90anp9td',
-    password: 'fecf0767142194a59c80bab7fd9b390ecc7ad9a489944e9424ab15351e177b9f',
+    user: auth.user,
+    host: auth.host,
+    database: auth.database,
+    password: auth.password,
     port: 5432,
     ssl: true,
   });
